@@ -1,7 +1,7 @@
 // Lokkin settlement sidecar.
 //
 // Polls the backend for FINALIZED quizzes, pays every payout from the escrow
-// wallet on Nimiq (feeless basic transactions with an "LK-PAYOUT" memo),
+// wallet on Nimiq (feeless basic transactions with an "QS-PAYOUT" memo),
 // then reports the transaction hashes back so the quiz flips to SETTLED.
 //
 // Environment:
@@ -22,7 +22,7 @@ const NETWORK_ID = Number(process.env.NIMIQ_NETWORK_ID ?? 1)
 const POLL_MS = Number(process.env.POLL_MS ?? 15_000)
 const DRY_RUN = process.env.DRY_RUN === 'true'
 const LUNAS_PER_NIM = 100_000
-const PAYOUT_MEMO = new TextEncoder().encode('LK-PAYOUT')
+const PAYOUT_MEMO = new TextEncoder().encode('QS-PAYOUT')
 
 const log = (...a) => console.log(new Date().toISOString(), ...a)
 

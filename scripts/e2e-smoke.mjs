@@ -80,7 +80,7 @@ async function main() {
   // two more commit -> quorum (join now returns memo + escrow info)
   for (const u of [bode, chidi]) {
     const joined = await api(`/api/quizzes/${quizId}/join`, { method: 'POST', body: JSON.stringify({ userId: u.id }) })
-    if (!joined.memoCode || !joined.memoCode.startsWith('LK-')) throw new Error('join missing memoCode')
+    if (!joined.memoCode || !joined.memoCode.startsWith('QS-')) throw new Error('join missing memoCode')
     const status = await api(`/api/quizzes/${quizId}/commitments/${joined.participantId}`)
     if (status.status !== 'JOINED') throw new Error('mock commitment not confirmed')
   }

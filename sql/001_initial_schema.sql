@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS participants (
   started_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
   disconnect_count INTEGER NOT NULL DEFAULT 0 CHECK (disconnect_count >= 0),
+  last_seen_at TIMESTAMPTZ,
   correct_answers INTEGER NOT NULL DEFAULT 0 CHECK (correct_answers >= 0),
   valid_questions INTEGER,
   score_percentage NUMERIC(8,5),

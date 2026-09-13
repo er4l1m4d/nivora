@@ -50,6 +50,8 @@ class Participant(Base):
     # Unique memo code binding the on-chain payment to this participant (real mode)
     memo_code: Mapped[str | None] = mapped_column(String(12))
     disconnect_count: Mapped[int] = mapped_column(Integer, default=0)
+    # Last heartbeat timestamp from the client poll; powers reconnect/away-state (Track F)
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     correct_answers: Mapped[int] = mapped_column(Integer, default=0)
     score_percentage: Mapped[Decimal | None] = mapped_column(Numeric(8, 5))
     rank: Mapped[int | None] = mapped_column(Integer)

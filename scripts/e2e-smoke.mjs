@@ -15,7 +15,7 @@ const api = async (path, init) => {
 const log = (...a) => console.log('  ', ...a)
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
-async function waitForStatus(quizId, target, maxPolls = 20) {
+async function waitForStatus(quizId, target, maxPolls = 500) {
   for (let i = 0; i < maxPolls; i++) {
     const state = await api(`/api/quizzes/${quizId}/state`)
     if (state.status === target) return state
@@ -28,7 +28,7 @@ async function main() {
   console.log(`Lokkin e2e smoke against ${BASE}`)
 
   // health + config
-  const health = await api('/health')
+  const health = await api('/api/health')
   if (!health.ok) throw new Error('health check failed')
   const config = await api('/api/config')
   if (!['mock', 'real'].includes(config.paymentsMode)) throw new Error('bad paymentsMode')

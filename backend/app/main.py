@@ -70,6 +70,7 @@ def settlement_token_ok(request: Request) -> bool:
 
 
 @app.get("/health")
+@app.get("/api/health")
 async def health():
     return {"ok": True}
 

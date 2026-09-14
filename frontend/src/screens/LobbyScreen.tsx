@@ -157,15 +157,23 @@ export function LobbyScreen() {
               Nobody has committed yet — you're early. Share the Qest to fill the room.
             </p>
           ) : (
-            <ul className="mt-3 flex flex-col gap-2">
-              {participants.map((p) => (
-                <ParticipantRow
-                  key={p.id}
-                  participant={p}
-                  isCreator={p.displayName === user?.displayName && isCreator}
-                />
-              ))}
-            </ul>
+              <ul className="mt-3 flex flex-col gap-2">
+                {participants.map((p) => {
+                  const away =
+                    isLive &&
+                    p.status === 'ACTIVE' &&
+                    p.lastSeenAt != null &&
+                    now - Date.parse(p.lastSeenAt) > 20_000
+                  return (
+                    <ParticipantRow
+                      key={p.id}
+                      participant={p}
+                      isCreator={p.displayName === user?.displayName && isCreator}
+                      away={away}
+                    />
+                  )
+                })}
+              </ul>
           )}
         </section>
 

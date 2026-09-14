@@ -105,6 +105,8 @@ export interface Participant {
   displayName: string
   status: ParticipantStatus
   memoCode?: string | null
+  lastSeenAt?: string | null
+  answeredQuestionIds?: string[]
   disconnectCount: number
   correctAnswers: number
   scorePercentage: number | null
@@ -117,6 +119,7 @@ export interface QuizState {
   serverTime: string
   deadline: number | null
   participantStatus: ParticipantStatus | null
+  answeredQuestionIds?: string[]
 }
 
 // ---------- payments / wallet ----------

@@ -509,6 +509,7 @@ export function createMockApi(): QestiaApi {
         memoCode: generateMemoCode(),
         disconnectCount: 0,
         correctAnswers: 0,
+        answeredQuestionIds: [],
         scorePercentage: null,
         rank: null,
         entryAmount: quiz.entryAmount,
@@ -582,6 +583,7 @@ export function createMockApi(): QestiaApi {
         serverTime: new Date().toISOString(),
         deadline: quiz.status === 'LIVE' ? Date.now() / 1000 + quiz.durationSeconds : null,
         participantStatus: mine?.status ?? null,
+        answeredQuestionIds: mine?.answeredQuestionIds ?? [],
       }
     },
 
@@ -626,6 +628,10 @@ export function createMockApi(): QestiaApi {
 
       const correct = req.selectedOption === question.correctOption
       if (correct) participant.correctAnswers += 1
+      participant.answeredQuestionIds ??= []
+      if (!participant.answeredQuestionIds.includes(req.questionId)) {
+        participant.answeredQuestionIds.push(req.questionId)
+      }
 
       // auto-complete when all questions answered
       const myAnswers = answers.filter((a) => a.participantId === req.participantId)

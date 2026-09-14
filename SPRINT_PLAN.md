@@ -446,3 +446,11 @@ OBS Studio (or Xbox Game Bar): 1080p, 60 fps, mic test pass. One beat per take �
 - **B.2** frontend `CreateScreen` step 1: `.pdf` routes to `api.uploadMaterial(file)`; on success text lands in the paste area + "Extracted N pages" note (amber when truncated); removed the two "PDF coming soon" strings. `api/types|client|mock` get `uploadMaterial` (mock rejects with "PDF needs the backend").
 - **B.3** `backend/tests/test_materials.py` — 4 tests (success/non-pdf/oversized/scanned) using committed fixtures `backend/tests/fixtures/sample.pdf` (2pg text) + `scanned.pdf` (no text). Full backend suite: **27 passed**. Frontend lint/build/test green (18). Local note: `python-multipart` had to be `pip install`ed into the test venv (already in requirements).
 - **Deploy note:** the new endpoint is server-side only; it works on prod once the deploy picks up `requirements.txt` (already has `pypdf`+`python-multipart`). No new Vercel env var needed.
+
+### F — reconnect / resume hardening (done)
+- **F.1** `GET /api/quizzes/{id}/state` now stamps `last_seen_at = utcnow()` for any JOINED/ACTIVE participant that polls. Already polled every 5s by `QuizPlayScreen`, so presence heartbeats automatically.
+- **F.2** `/state` returns `answeredQuestionIds` (from `Answer` rows). `QuizPlayScreen` boot computes the first unanswered index via `lib/resume.ts::firstUnansweredIndex` and jumps there on rejoin.
+- **F.3** `GET /api/quizzes/{id}/participants` returns `lastSeenAt`. `LobbyScreen` marks an ACTIVE participant "away" (amber dot + "away" label) when `now - lastSeenAt > 20s` during LIVE. `ParticipantRow` gained an `away` prop.
+- **F.4** "Welcome back — we picked up where you left off." banner in `QuizPlayScreen` when a returning participant has prior answers (dismissible).
+- **F.5 tests:** `backend/tests/test_heartbeat.py` (heartbeat stamp + answeredQuestionIds tracking); `frontend/src/lib/resume.test.ts` (resume index). Full suite: backend **28 passed**, frontend **22 passed**, lint + build clean.
+- **F.6 cut line:** F.1 + F.2 shipped; the presence "away" dot (F.3) + welcome-back banner (F.4) included as polish.

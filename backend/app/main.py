@@ -532,6 +532,7 @@ async def get_participants(quiz_id: UUID, db: AsyncSession = Depends(get_db)):
             "userId": str(p.user_id),
             "displayName": u.display_name,
             "status": p.status,
+            "lastSeenAt": p.last_seen_at.isoformat() if p.last_seen_at else None,
             "disconnectCount": p.disconnect_count,
             "correctAnswers": p.correct_answers,
             "scorePercentage": float(p.score_percentage) if p.score_percentage is not None else None,
@@ -552,18 +553,30 @@ async def quiz_state(quiz_id: UUID, user_id: UUID | None = None, db: AsyncSessio
 
     deadline = quiz_deadline(quiz)
     participant_status = None
+    answered_question_ids: list[str] = []
     if user_id:
         row = await db.execute(
             select(Participant).where(Participant.quiz_id == quiz.id, Participant.user_id == user_id)
         )
         participant = row.scalar_one_or_none()
         participant_status = participant.status if participant else None
+        # F.1: heartbeat — stamp presence whenever a JOINED/ACTIVE participant polls.
+        if participant and participant.status in ("JOINED", "ACTIVE"):
+            participant.last_seen_at = utcnow()
+            await db.commit()
+        # F.2: which questions this participant has already answered.
+        if participant:
+            ans = await db.execute(
+                select(Answer.question_id).where(Answer.participant_id == participant.id)
+            )
+            answered_question_ids = [str(qid) for qid in ans.scalars().all()]
 
     return {
         "status": quiz.status,
         "serverTime": utcnow().isoformat(),
         "deadline": deadline.timestamp() if deadline else None,
         "participantStatus": participant_status,
+        "answeredQuestionIds": answered_question_ids,
     }
 
 

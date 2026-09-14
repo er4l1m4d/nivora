@@ -11,6 +11,7 @@ import { OptionButton } from '@/components/OptionButton'
 import { TimerPill } from '@/components/TimerPill'
 import { useSession } from '@/context/useSession'
 import { bumpStreak } from '@/lib/streak'
+import { firstUnansweredIndex } from '@/lib/resume'
 import { usePolling } from '@/hooks/usePolling'
 
 const REVEAL_MS = 900
@@ -48,6 +49,7 @@ export function QuizPlayScreen() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [finished, setFinished] = useState(false)
+  const [welcomeBack, setWelcomeBack] = useState(false)
   const submitLock = useRef(false)
 
   // Poll quiz state — the server owns the clock
@@ -81,6 +83,12 @@ export function QuizPlayScreen() {
         const questions = await api.getQuestions(quizId, user.id)
         if (cancelled) return
         if (questions.length === 0) throw new Error('This Qest has no active questions')
+        // F.2: resume — jump to the first question this participant hasn't answered.
+        const prior = await api.getQuizState(quizId, user.id)
+        const answeredIds = prior.answeredQuestionIds ?? []
+        const startIndex = firstUnansweredIndex(questions, answeredIds)
+        setIndex(startIndex)
+        if (answeredIds.length > 0) setWelcomeBack(true)
         const started: PlaySession = {
           participantId,
           questions,
@@ -222,6 +230,20 @@ export function QuizPlayScreen() {
   return (
     <AppShell hideNav>
       <div className="screen gap-5">
+        {welcomeBack && (
+          <div className="flex items-center gap-2 rounded-card border-2 border-ink bg-volt px-4 py-2.5 text-sm font-bold text-ink shadow-card">
+            <Icon name="refresh" size={18} weight="fill" />
+            <span>Welcome back — we picked up where you left off.</span>
+            <button
+              type="button"
+              onClick={() => setWelcomeBack(false)}
+              className="ml-auto rounded-pill p-1"
+              aria-label="Dismiss"
+            >
+              <Icon name="x" size={16} weight="bold" />
+            </button>
+          </div>
+        )}
         <header className="flex shrink-0 items-center justify-between">
           {/* screen heading — visually a label, semantically the h1 */}
           <h1 className="font-display text-sm font-extrabold text-ink-muted tabular-nums">

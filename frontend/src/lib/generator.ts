@@ -39,9 +39,9 @@ export function canGenerate(material: string): boolean {
 }
 
 /**
- * Mock AI generator: turns pasted study material into cloze-style draft
- * questions. Real Gemini generation replaces this in Phase 6 — the interface
- * (material -> editable drafts) stays identical.
+ * Local fallback engine: turns pasted study material into cloze-style draft
+ * questions. The backend `/api/generate` (Track A) is the primary path; this
+ * runs only when the API is unavailable, so the demo never dead-ends.
  */
 export function generateDraftQuestions(material: string, count: number): DraftQuestion[] {
   const sentences = material
@@ -100,6 +100,24 @@ export function blankDraft(): DraftQuestion {
     options: OPTION_KEYS.map((key) => ({ key, text: '' })),
     correctOption: 'A',
     explanation: null,
+  }
+}
+
+/** Map a backend `AiDraftQuestion` (text/options[]/correctIndex) into the editor shape. */
+export function toDraftQuestion(ai: {
+  text: string
+  options: string[]
+  correctIndex: number
+  explanation: string | null
+}): DraftQuestion {
+  const opts = ai.options.slice(0, 4)
+  while (opts.length < 4) opts.push('')
+  return {
+    id: uid(),
+    questionText: ai.text,
+    options: opts.map((text, i) => ({ key: OPTION_KEYS[i], text })),
+    correctOption: OPTION_KEYS[Math.min(Math.max(ai.correctIndex, 0), 3)],
+    explanation: ai.explanation,
   }
 }
 

@@ -13,6 +13,7 @@ import {
   blankDraft,
   canGenerate,
   generateDraftQuestions,
+  toDraftQuestion,
   type DraftQuestion,
 } from '@/lib/generator'
 
@@ -31,6 +32,7 @@ export function CreateScreen() {
 
   const [step, setStep] = useState<Step>('upload')
   const [genMessage, setGenMessage] = useState('')
+  const [genNote, setGenNote] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // draft settings
@@ -69,19 +71,27 @@ export function CreateScreen() {
       return
     }
     setError(null)
+    setGenNote(null)
     setStep('generating')
     setGenMessage('Reading your material…')
-    await sleep(900)
+    await sleep(700)
     setGenMessage('Drafting questions…')
-    await sleep(1100)
-    const generated = generateDraftQuestions(material, questionCount)
+    let generated: DraftQuestion[] = []
+    try {
+      const res = await api.generateQuestions({ material, numQuestions: questionCount })
+      generated = res.questions.map(toDraftQuestion)
+    } catch {
+      // Backend AI unavailable (disabled, timeout, or network) — fall back locally.
+      setGenNote('AI unavailable — drafted from your text directly.')
+      generated = generateDraftQuestions(material, questionCount)
+    }
     if (generated.length === 0) {
       setError('Could not find enough substance in that material. Try richer text.')
       setStep('upload')
       return
     }
     setGenMessage('Polishing the wording…')
-    await sleep(800)
+    await sleep(600)
     setDrafts(generated)
     setStep('review')
   }
@@ -310,6 +320,11 @@ export function CreateScreen() {
             <div className="h-14 w-14 animate-spin rounded-pill border-4 border-paper-deep border-t-ink" />
             <p className="font-display text-base font-extrabold tracking-tight text-ink">{genMessage}</p>
             <p className="text-xs text-ink-muted">This usually takes a few seconds</p>
+            {genNote && (
+              <p className="mt-2 rounded-pill border border-amber-soft bg-amber-soft/40 px-3 py-1 text-xs font-medium text-ink-soft">
+                {genNote}
+              </p>
+            )}
           </section>
         )}
 

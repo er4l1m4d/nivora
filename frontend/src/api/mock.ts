@@ -5,6 +5,7 @@ import type {
   CreateQuestionRequest,
   CreateQuizRequest,
   CreateUserRequest,
+  GenerateQuestionsRequest,
   JoinResult,
   QestiaApi,
   OptionKey,
@@ -19,7 +20,7 @@ import type {
   VerifyCommitmentResult,
 } from './types'
 import { VALID_QUIZ_TRANSITIONS } from './types'
-import { generateMemoCode } from '@/lib/generator'
+import { generateDraftQuestions, generateMemoCode } from '@/lib/generator'
 
 // ---------- payout rules (locked product decisions) ----------
 // Top 3: 100% entry back + pool split 50/30/10
@@ -720,6 +721,23 @@ export function createMockApi(): QestiaApi {
         })
       }
       return entries
+    },
+
+    // Mock mode: AI generation is the local cloze generator. In real mode this
+    // call hits POST /api/generate (backend, which falls back to the same logic
+    // on failure). The returned shape matches the real endpoint.
+    async generateQuestions(req: GenerateQuestionsRequest) {
+      await delay(400)
+      const drafts = generateDraftQuestions(req.material, req.numQuestions)
+      return {
+        source: 'fallback' as const,
+        questions: drafts.map((d) => ({
+          text: d.questionText,
+          options: d.options.map((o) => o.text),
+          correctIndex: d.options.findIndex((o) => o.key === d.correctOption),
+          explanation: d.explanation,
+        })),
+      }
     },
   }
 }

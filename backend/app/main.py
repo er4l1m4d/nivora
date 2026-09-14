@@ -10,12 +10,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .chain import create_chain_client, escrow_address, payments_mode, rpc_url
 from .db import get_db, init_db
+from .llm import create_llm_client, LlmError
 from .models import Answer, Participant, Question, Quiz, Transaction, User
 from .schemas import (
     AnswerRequest,
     CreateQuestionRequest,
     CreateQuizRequest,
     CreateUserRequest,
+    GenerateRequest,
+    GenerateResponse,
     JoinRequest,
     VerifyCommitmentRequest,
     WalletLinkRequest,
@@ -41,6 +44,7 @@ import os
 async def lifespan(app: FastAPI):
     await init_db()
     app.state.chain = create_chain_client()
+    app.state.llm = create_llm_client()
     yield
 
 
@@ -82,6 +86,44 @@ async def get_config():
         "escrowAddress": escrow_address(),
         "minParticipantsDefault": 3,
     }
+
+
+@app.post("/api/generate", response_model=GenerateResponse)
+async def generate_questions(
+    req: GenerateRequest, request: Request
+):
+    """AI-drafted questions from pasted/uploaded material (Track A).
+
+    Returns {"source": "ai", ...} on success. 503s fast (and the frontend
+    falls back to the local generator) when the LLM is disabled or fails.
+    """
+    llm = getattr(request.app.state, "llm", None)
+    if llm is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Generation failed — try the basic generator.",
+        )
+    if len(req.material) < 200 or len(req.material) > 40000:
+        raise HTTPException(status_code=400, detail="Material must be 200–40000 characters.")
+    try:
+        questions = await llm.generate(req.material, req.num_questions)
+    except LlmError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Generation failed — try the basic generator.",
+        ) from exc
+    return GenerateResponse(
+        source="ai",
+        questions=[
+            {
+                "text": q.text,
+                "options": q.options,
+                "correctIndex": q.correctIndex,
+                "explanation": q.explanation,
+            }
+            for q in questions
+        ],
+    )
 
 
 # ---------- users ----------

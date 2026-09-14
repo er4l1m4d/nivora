@@ -5,6 +5,8 @@ import type {
   CreateQuestionRequest,
   CreateQuizRequest,
   CreateUserRequest,
+  GenerateQuestionsRequest,
+  GenerateQuestionsResponse,
   HistoryEntry,
   JoinResult,
   QestiaApi,
@@ -179,6 +181,16 @@ export function createRealApi(): QestiaApi {
 
     async getMyHistory(userId: string) {
       return request<HistoryEntry[]>(`/api/users/${userId}/history`)
+    },
+
+    async generateQuestions(req: GenerateQuestionsRequest) {
+      return request<GenerateQuestionsResponse>('/api/generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          material: req.material,
+          numQuestions: req.numQuestions,
+        }),
+      })
     },
   }
 }

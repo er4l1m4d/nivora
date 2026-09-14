@@ -72,3 +72,20 @@ class FlagRequest(CamelModel):
     participant_id: UUID
     reason: str = Field(min_length=1, max_length=100)
     description: str | None = None
+
+
+class GenerateRequest(CamelModel):
+    material: str
+    num_questions: int = Field(default=8, ge=5, le=20)
+
+
+class DraftQuestion(CamelModel):
+    text: str
+    options: list[str] = Field(min_length=4, max_length=4)
+    correct_index: int = Field(alias="correctIndex", ge=0, le=3)
+    explanation: str | None = None
+
+
+class GenerateResponse(CamelModel):
+    source: str
+    questions: list[DraftQuestion]

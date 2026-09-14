@@ -211,6 +211,26 @@ export interface QuizResults {
   rows: ResultRow[]
 }
 
+// ---------- AI generation (Track A) ----------
+
+export interface GenerateQuestionsRequest {
+  material: string
+  numQuestions: number
+}
+
+/** AI draft as returned by POST /api/generate (compact, matches the editor shape). */
+export interface AiDraftQuestion {
+  text: string
+  options: string[]
+  correctIndex: number
+  explanation: string | null
+}
+
+export interface GenerateQuestionsResponse {
+  source: 'ai' | 'fallback'
+  questions: AiDraftQuestion[]
+}
+
 // ---------- Review & history ----------
 
 /** A question as seen in post-quiz review — correct answer + your answer revealed */
@@ -260,4 +280,5 @@ export interface HistoryEntry {
   getResults(quizId: string): Promise<QuizResults>
   getReview(quizId: string, userId: string): Promise<ReviewQuestion[]>
   getMyHistory(userId: string): Promise<HistoryEntry[]>
+  generateQuestions(req: GenerateQuestionsRequest): Promise<GenerateQuestionsResponse>
 }

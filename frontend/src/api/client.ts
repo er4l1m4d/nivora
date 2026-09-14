@@ -18,6 +18,7 @@ import type {
   QuizState,
   QuizStatus,
   ReviewQuestion,
+  UploadMaterialResponse,
   VerifyCommitmentResult,
 } from './types'
 
@@ -191,6 +192,21 @@ export function createRealApi(): QestiaApi {
           numQuestions: req.numQuestions,
         }),
       })
+    },
+
+    async uploadMaterial(file: File) {
+      const body = new FormData()
+      body.append('file', file)
+      const res = await fetch(`${BASE_URL}/api/materials`, {
+        method: 'POST',
+        body,
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        const detail = typeof data.detail === 'string' ? data.detail : res.statusText
+        throw new ApiError(res.status, detail)
+      }
+      return res.json() as Promise<UploadMaterialResponse>
     },
   }
 }

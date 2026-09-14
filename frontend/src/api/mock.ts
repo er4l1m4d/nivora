@@ -16,6 +16,7 @@ import type {
   QuizListFilters,
   QuizStatus,
   ResultRow,
+  UploadMaterialResponse,
   User,
   VerifyCommitmentResult,
 } from './types'
@@ -738,6 +739,11 @@ export function createMockApi(): QestiaApi {
           explanation: d.explanation,
         })),
       }
+    },
+
+    // PDF extraction runs server-side; the mock has no backend, so it declines.
+    async uploadMaterial(_file: File): Promise<UploadMaterialResponse> {
+      throw new Error('PDF needs the backend — run with VITE_USE_MOCK=false.')
     },
   }
 }

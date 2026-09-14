@@ -231,6 +231,15 @@ export interface GenerateQuestionsResponse {
   questions: AiDraftQuestion[]
 }
 
+// ---------- Material upload (Track B) ----------
+
+export interface UploadMaterialResponse {
+  text: string
+  pages: number
+  chars: number
+  truncated: boolean
+}
+
 // ---------- Review & history ----------
 
 /** A question as seen in post-quiz review — correct answer + your answer revealed */
@@ -281,4 +290,5 @@ export interface HistoryEntry {
   getReview(quizId: string, userId: string): Promise<ReviewQuestion[]>
   getMyHistory(userId: string): Promise<HistoryEntry[]>
   generateQuestions(req: GenerateQuestionsRequest): Promise<GenerateQuestionsResponse>
+  uploadMaterial(file: File): Promise<UploadMaterialResponse>
 }

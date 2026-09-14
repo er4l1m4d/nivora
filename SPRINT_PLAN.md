@@ -440,3 +440,9 @@ OBS Studio (or Xbox Game Bar): 1080p, 60 fps, mic test pass. One beat per take �
 - **A.4** frontend wiring in `api/types.ts`+`client.ts`+`mock.ts` + `CreateScreen` (API-first, local fallback w/ note) + `lib/generator.ts` mapper.
 - **A.5** `.env.example` (root + backend) document `LLM_*`; `vercel.json` keeps `maxDuration:10`. **User action:** set real `LLM_*` in Vercel env + redeploy (consider raising `maxDuration`).
 - **A.6** `backend/tests/test_generate.py` — 9 tests. Full suite: 23 passed.
+
+### B — PDF upload (Sun/Mon, done through B.3)
+- **B.1** `POST /api/materials`: `UploadFile` (multipart, `python-multipart` added in C.2), `.pdf` only → 400, >5MB → 413, `pypdf.PdfReader` extract, text capped at 40k, 422 on no-extractable-text / encrypted / corrupt. Returns `{text, pages, chars, truncated}`.
+- **B.2** frontend `CreateScreen` step 1: `.pdf` routes to `api.uploadMaterial(file)`; on success text lands in the paste area + "Extracted N pages" note (amber when truncated); removed the two "PDF coming soon" strings. `api/types|client|mock` get `uploadMaterial` (mock rejects with "PDF needs the backend").
+- **B.3** `backend/tests/test_materials.py` — 4 tests (success/non-pdf/oversized/scanned) using committed fixtures `backend/tests/fixtures/sample.pdf` (2pg text) + `scanned.pdf` (no text). Full backend suite: **27 passed**. Frontend lint/build/test green (18). Local note: `python-multipart` had to be `pip install`ed into the test venv (already in requirements).
+- **Deploy note:** the new endpoint is server-side only; it works on prod once the deploy picks up `requirements.txt` (already has `pypdf`+`python-multipart`). No new Vercel env var needed.

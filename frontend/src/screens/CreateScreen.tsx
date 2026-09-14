@@ -33,6 +33,7 @@ export function CreateScreen() {
   const [step, setStep] = useState<Step>('upload')
   const [genMessage, setGenMessage] = useState('')
   const [genNote, setGenNote] = useState<string | null>(null)
+  const [extractNote, setExtractNote] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // draft settings
@@ -51,9 +52,21 @@ export function CreateScreen() {
 
   const onFile = async (file: File) => {
     setError(null)
+    setExtractNote(null)
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
     if (isPdf) {
-      setError('PDF upload is coming soon — for now, paste the text below.')
+      try {
+        const res = await api.uploadMaterial(file)
+        setMaterial(res.text)
+        setFileName(file.name)
+        setExtractNote(
+          res.truncated
+            ? `Extracted ${res.pages} pages — text truncated to ${res.chars} chars`
+            : `Extracted ${res.pages} pages from ${file.name}`,
+        )
+      } catch (e) {
+        setError(friendlyError(e))
+      }
       return
     }
     const text = await file.text()
@@ -249,7 +262,7 @@ export function CreateScreen() {
                   {fileName ?? 'Upload notes or paste below'}
                 </span>
                 <span className="mt-0.5 block text-xs text-ink-muted">
-                  .txt or .md · PDF coming soon
+                  .txt, .md or .pdf
                 </span>
               </button>
               <input
@@ -273,6 +286,18 @@ export function CreateScreen() {
                 className="mt-3 min-h-36 w-full resize-y rounded-card border-2 border-ink bg-surface px-4 py-3 text-base leading-relaxed text-ink placeholder:text-ink-muted/70 focus:bg-volt-faint"
                 aria-label="Study material"
               />
+              {extractNote && (
+                <p
+                  className={
+                    'mt-2 rounded-pill border px-3 py-1 text-xs font-medium ' +
+                    (extractNote.includes('truncated')
+                      ? 'border-amber-soft bg-amber-soft/40 text-ink-soft'
+                      : 'border-success-soft bg-success-soft/30 text-ink-soft')
+                  }
+                >
+                  {extractNote}
+                </p>
+              )}
               <p className="mt-1 text-right text-xs text-ink-muted tabular-nums">
                 {material.trim().length} characters
               </p>

@@ -1,10 +1,12 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from decimal import Decimal
+from io import BytesIO
 from uuid import UUID
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, status, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from pypdf import PdfReader
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -124,6 +126,39 @@ async def generate_questions(
             for q in questions
         ],
     )
+
+
+# Max PDF size accepted for text extraction (Track B).
+MAX_MATERIAL_BYTES = 5 * 1024 * 1024
+MAX_EXTRACTED_CHARS = 40_000
+
+
+@app.post("/api/materials")
+async def upload_material(file: UploadFile = File(...)):
+    """Server-side PDF text extraction (Track B). Returns extracted text that
+    lands in the same paste area; the AI path consumes it identically."""
+    if not file.filename or not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only .pdf files are supported.")
+    data = await file.read()
+    if len(data) > MAX_MATERIAL_BYTES:
+        raise HTTPException(status_code=413, detail="File too large — max 5 MB.")
+    try:
+        reader = PdfReader(BytesIO(data))
+        pages = [p.extract_text() or "" for p in reader.pages]
+    except Exception:
+        raise HTTPException(
+            status_code=422,
+            detail="Could not read the PDF — it may be encrypted or corrupt.",
+        )
+    text = "\n".join(pages)
+    if not text.strip():
+        raise HTTPException(
+            status_code=422,
+            detail="No selectable text — looks scanned. Paste the text instead.",
+        )
+    truncated = len(text) > MAX_EXTRACTED_CHARS
+    text = text[:MAX_EXTRACTED_CHARS]
+    return {"text": text, "pages": len(pages), "chars": len(text), "truncated": truncated}
 
 
 # ---------- users ----------

@@ -98,8 +98,12 @@ export function ResultsScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
-        {error && data && <StaleBanner />}
+      <div className="screen">
+        {error && data && (
+          <div className="shrink-0">
+            <StaleBanner />
+          </div>
+        )}
 
         <header className="flex shrink-0 items-start justify-between gap-3">
           <div className="min-w-0">
@@ -115,9 +119,8 @@ export function ResultsScreen() {
           <StatusStepper current={quiz.status} />
         </div>
 
-        <div className="screen-scroll gap-4">
-          {results === null ? (
-          <section className="flex flex-col items-center gap-3 rounded-card border-2 border-ink bg-surface p-8 text-center shadow-card">
+        {results === null ? (
+          <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 rounded-card border-2 border-ink bg-surface p-8 text-center shadow-card">
             <div className="flex h-12 w-12 items-center justify-center rounded-pill bg-volt-faint text-ink" aria-hidden>
               <Icon name="refresh" size={22} className="animate-spin" />
             </div>
@@ -133,7 +136,7 @@ export function ResultsScreen() {
           <>
             {myRow && (
               <section
-                className={`rounded-card border-2 p-5 text-center ${
+                className={`shrink-0 rounded-card border-2 p-[clamp(0.625rem,2.2svh,1.25rem)] text-center ${
                   myRow.payoutKind === 'winner'
                     ? 'border-ink bg-volt shadow-press-sm'
                     : 'border-ink bg-surface shadow-card'
@@ -145,7 +148,7 @@ export function ResultsScreen() {
                     ? "You didn't finish"
                     : `You finished ${ordinal(myRow.rank)}`}
                 </p>
-                <p className="mt-1 font-display text-4xl font-extrabold tracking-tight tabular-nums text-ink">
+                <p className="mt-1 font-display text-[clamp(1.6rem,6svh,2.25rem)] font-extrabold tracking-tight tabular-nums text-ink">
                   {myRow.correctAnswers}/{myRow.totalQuestions}
                 </p>
                 <p className="mt-1 text-sm font-semibold text-ink-soft">
@@ -171,7 +174,7 @@ export function ResultsScreen() {
               </section>
             )}
 
-            <section className="rounded-card border-2 border-ink bg-surface p-5 shadow-card">
+            <section className="shrink-0 rounded-card border-2 border-ink bg-surface p-[clamp(0.625rem,2.2svh,1.25rem)] shadow-card">
               <div className="flex items-center justify-between">
                 <h2 className="font-display text-base font-extrabold tracking-tight text-ink">
                   The podium
@@ -180,21 +183,21 @@ export function ResultsScreen() {
                   {results.prizePool.toFixed(2)} NIM pot
                 </span>
               </div>
-              <div className="mt-4 flex items-end gap-2">
+              <div className="mt-[clamp(0.5rem,1.8svh,1rem)] flex items-end gap-2">
                 <PodiumSlot place={2} row={podium[1] ?? null} />
                 <PodiumSlot place={1} row={podium[0] ?? null} />
                 <PodiumSlot place={3} row={podium[2] ?? null} />
               </div>
-              <p className="mt-3 text-center text-[11px] text-ink-muted">
+              <p className="mt-[clamp(0.375rem,1.2svh,0.75rem)] text-center text-[11px] text-ink-muted">
                 Top 3 split the pot 50 / 30 / 10 — ties share a rank's cut
               </p>
             </section>
 
-            <section className="rounded-card border-2 border-ink bg-surface p-5 shadow-card">
-              <h2 className="font-display text-base font-extrabold tracking-tight text-ink">
+            <section className="flex min-h-0 flex-1 flex-col rounded-card border-2 border-ink bg-surface p-[clamp(0.625rem,2.2svh,1.25rem)] shadow-card">
+              <h2 className="shrink-0 font-display text-base font-extrabold tracking-tight text-ink">
                 Standing
               </h2>
-              <ol className="mt-3 flex flex-col gap-2">
+              <ol className="screen-scroll mt-[clamp(0.375rem,1.2svh,0.75rem)]">
                 {rows.map((row) => {
                   const isMe = row.displayName === user?.displayName
                   const tied = rows.filter((r) => r.rank === row.rank).length > 1
@@ -233,7 +236,6 @@ export function ResultsScreen() {
             </section>
           </>
         )}
-        </div>
 
         <div className="screen-footer">
           <div className="flex flex-col gap-2">

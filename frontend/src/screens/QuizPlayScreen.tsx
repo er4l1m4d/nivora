@@ -229,9 +229,9 @@ export function QuizPlayScreen() {
 
   return (
     <AppShell hideNav>
-      <div className="screen gap-5">
+      <div className="screen">
         {welcomeBack && (
-          <div className="flex items-center gap-2 rounded-card border-2 border-ink bg-volt px-4 py-2.5 text-sm font-bold text-ink shadow-card">
+          <div className="flex shrink-0 items-center gap-2 rounded-card border-2 border-ink bg-volt px-4 py-2.5 text-sm font-bold text-ink shadow-card">
             <Icon name="refresh" size={18} weight="fill" />
             <span>Welcome back — we picked up where you left off.</span>
             <button
@@ -260,12 +260,12 @@ export function QuizPlayScreen() {
           />
         </div>
 
-        <div className="screen-scroll gap-5">
-          <section className="rounded-card border-2 border-ink bg-surface p-6 shadow-card">
-            <h2 className="font-display text-[1.35rem] leading-snug font-extrabold tracking-tight text-ink">
+        <div className="screen-scroll">
+          <section className="flex min-h-0 flex-1 flex-col rounded-card border-2 border-ink bg-surface p-[clamp(1.125rem,2.8svh,1.5rem)] shadow-card">
+            <h2 className="font-display text-[clamp(1.05rem,3.2svh,1.35rem)] leading-snug font-extrabold tracking-tight text-ink">
               {question.questionText}
             </h2>
-            <div className="mt-5 flex flex-col gap-2.5" aria-live="polite">
+            <div className="mt-[clamp(0.75rem,2.2svh,1.25rem)] flex min-h-0 flex-1 flex-col gap-[clamp(0.3rem,1.1svh,0.625rem)]" aria-live="polite">
               {question.options.map((opt) => {
                 let optReveal: 'correct' | 'wrong' | 'missed' | undefined
                 if (reveal) {
@@ -283,6 +283,7 @@ export function QuizPlayScreen() {
                     selected={selected === opt.key}
                     disabled={reveal !== null || submitting}
                     reveal={optReveal}
+                    fill
                     onSelect={(k) => {
                       if (!reveal && !submitting) setSelected(k)
                     }}
@@ -293,7 +294,7 @@ export function QuizPlayScreen() {
           </section>
         </div>
 
-        <div className="screen-footer">
+        <div className="screen-footer flex flex-col gap-[clamp(0.375rem,1.1svh,0.75rem)]">
           {submitError && <ErrorBanner>{submitError}</ErrorBanner>}
 
           {!reveal ? (
@@ -315,7 +316,7 @@ export function QuizPlayScreen() {
             </p>
           )}
 
-          <p className="mt-3 text-center text-[11px] leading-relaxed text-ink-muted">
+          <p className="text-center text-[11px] leading-relaxed text-ink-muted">
             One answer per question — locked the moment you confirm. No going back.
           </p>
         </div>

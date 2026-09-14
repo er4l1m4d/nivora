@@ -9,6 +9,8 @@ interface OptionButtonProps {
   /** reveal state after confirm */
   reveal?: 'correct' | 'wrong' | 'missed'
   disabled?: boolean
+  /** grow to share a flex column's height (fit-to-screen play layout) */
+  fill?: boolean
   onSelect: (key: OptionKey) => void
 }
 
@@ -25,6 +27,7 @@ export function OptionButton({
   selected,
   reveal,
   disabled = false,
+  fill = false,
   onSelect,
 }: OptionButtonProps) {
   const base =
@@ -54,7 +57,7 @@ export function OptionButton({
   return (
     <button
       type="button"
-      className={`${base} min-h-14 ${state} ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
+      className={`${base} ${fill ? 'min-h-12 flex-1' : 'min-h-14'} ${state} ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
       disabled={disabled}
       onClick={() => onSelect(optionKey)}
       aria-pressed={selected}

@@ -140,7 +140,7 @@ export function CommitScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
+      <div className="screen">
         <header className="shrink-0">
           <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">
             Lock in your <span className="highlight">stake</span>
@@ -150,13 +150,13 @@ export function CommitScreen() {
 
         {error && <ErrorBanner>{error}</ErrorBanner>}
 
-        <div className="screen-scroll gap-4">
+        <div className="screen-scroll">
 
         {stage === 'summary' && (
           <>
-            <section className="rounded-card border-2 border-ink bg-volt p-6 text-center shadow-press-sm">
+            <section className="shrink-0 rounded-card border-2 border-ink bg-volt p-[clamp(1rem,3.2svh,1.5rem)] text-center shadow-press-sm">
               <p className="font-display text-sm font-bold text-ink-soft">You're committing</p>
-              <p className="mt-2 font-display text-5xl font-extrabold tracking-tight tabular-nums text-ink">
+              <p className="mt-2 font-display text-[clamp(2rem,7.5svh,3rem)] font-extrabold tracking-tight tabular-nums text-ink">
                 {entry} NIM
               </p>
               {realMode ? (
@@ -195,7 +195,7 @@ export function CommitScreen() {
         )}
 
         {stage === 'confirming' && (
-          <section className="flex min-h-[40vh] flex-col items-center justify-center gap-4 rounded-card border-2 border-ink bg-surface p-8 shadow-card" role="status">
+          <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 rounded-card border-2 border-ink bg-surface p-8 text-center shadow-card" role="status">
             <div className="h-14 w-14 animate-spin rounded-pill border-4 border-paper-deep border-t-ink" />
             <p className="font-display text-base font-extrabold tracking-tight text-ink">
               {realMode ? 'Reserving your spot…' : 'Confirming transaction…'}

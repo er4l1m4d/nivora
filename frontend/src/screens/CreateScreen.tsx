@@ -187,7 +187,7 @@ export function CreateScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-5">
+      <div className="screen">
         <header className="shrink-0">
           <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">
             Create a <span className="highlight">Qest</span>
@@ -206,7 +206,7 @@ export function CreateScreen() {
 
         {error && <ErrorBanner>{error}</ErrorBanner>}
 
-        <div className="screen-scroll gap-5">
+        <div className="screen-scroll">
 
         {step === 'upload' && (
           <section className="flex flex-col gap-4">

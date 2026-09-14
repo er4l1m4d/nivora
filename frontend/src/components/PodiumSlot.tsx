@@ -14,9 +14,9 @@ const MEDALS: Record<1 | 2 | 3, { label: string; block: string; iconBox: string;
 }
 
 const HEIGHTS: Record<1 | 2 | 3, string> = {
-  1: 'h-24',
-  2: 'h-16',
-  3: 'h-12',
+  1: 'h-[clamp(3rem,9svh,6rem)]',
+  2: 'h-[clamp(2.25rem,6.5svh,4rem)]',
+  3: 'h-[clamp(1.75rem,5svh,3rem)]',
 }
 
 export function PodiumSlot({ place, row }: PodiumSlotProps) {

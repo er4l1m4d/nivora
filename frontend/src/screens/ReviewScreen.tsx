@@ -71,7 +71,7 @@ export function ReviewScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
+      <div className="screen">
         {error && review && <StaleBanner />}
 
         <header className="flex shrink-0 items-start justify-between gap-3">
@@ -97,7 +97,7 @@ export function ReviewScreen() {
           </p>
         )}
 
-        <div className="screen-scroll gap-4">
+        <div className="screen-scroll">
           {review.map((q, i) => (
             <ReviewCard key={q.id} question={q} index={i + 1} />
           ))}

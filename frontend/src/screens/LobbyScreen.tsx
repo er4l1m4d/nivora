@@ -83,7 +83,7 @@ export function LobbyScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
+      <div className="screen">
         {error && data && <StaleBanner />}
 
         <header className="shrink-0 text-center">
@@ -127,7 +127,7 @@ export function LobbyScreen() {
           )}
         </section>
 
-        <div className="screen-scroll gap-4">
+        <div className="screen-scroll">
           <section className="rounded-card border-2 border-ink bg-surface p-5 shadow-card">
             <MeterBar
             value={confirmed}

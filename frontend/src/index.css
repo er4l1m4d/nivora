@@ -105,14 +105,27 @@ html, body, #root {
   height: 100%;
 }
 
+html, body {
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--color-ink);
   background: var(--color-paper);
+  min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Viewport-locked shell. 100vh first as a fallback for webviews (like older
+   wallet webviews) that don't understand dvh — the second declaration wins
+   wherever supported. */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
 }
 
 /* Fixed-height app shell helpers.
@@ -120,12 +133,16 @@ body {
    .screen-scroll  — the only region inside a screen allowed to scroll;
                      it takes the remaining height and scrolls internally.
    .screen-footer  — a non-scrolling footer (primary CTA) pinned to the
-                     bottom of the screen so it's always reachable. */
+                     bottom of the screen so it's always reachable.
+   Vertical gaps/padding scale with the viewport (svh) so fixed content
+   fits short phones instead of pushing lists into scrolling. Unlayered so
+   they win over the static gap utilities on these same elements. */
 .screen {
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  gap: clamp(0.5rem, 1.8svh, 1.25rem);
 }
 
 .screen-scroll {
@@ -134,12 +151,13 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: clamp(0.5rem, 1.6svh, 1rem);
   overscroll-behavior: contain;
 }
 
 .screen-footer {
   flex: none;
-  padding-top: 1rem;
+  padding-top: clamp(0.5rem, 1.6svh, 1rem);
 }
 
 h1, h2, h3, h4 {

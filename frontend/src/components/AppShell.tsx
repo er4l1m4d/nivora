@@ -16,7 +16,7 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
   }, [location.pathname])
 
   return (
-    <div className="relative mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-paper sm:border-x sm:border-line">
+    <div className="app-shell relative mx-auto flex w-full max-w-md flex-col overflow-hidden bg-paper sm:border-x sm:border-line">
       <a
         href="#main-content"
         className="fixed left-4 top-4 z-[100] -translate-y-20 rounded-pill bg-ink px-4 py-2 text-sm font-bold text-paper transition-transform focus:translate-y-0"
@@ -27,8 +27,13 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
         ref={mainRef}
         id="main-content"
         tabIndex={-1}
-        className={`mx-auto flex w-full flex-1 flex-col overflow-hidden px-5 ${hideNav ? 'pb-10' : 'pb-28'}`}
-        style={{ paddingTop: 'max(1.5rem, env(safe-area-inset-top))' }}
+        className="mx-auto flex w-full flex-1 flex-col overflow-hidden px-5"
+        style={{
+          paddingTop: 'max(1.25rem, env(safe-area-inset-top))',
+          paddingBottom: hideNav
+            ? 'calc(0.75rem + env(safe-area-inset-bottom))'
+            : 'calc(5.25rem + env(safe-area-inset-bottom))',
+        }}
       >
         {children}
       </main>

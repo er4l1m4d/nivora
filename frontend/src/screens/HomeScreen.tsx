@@ -75,7 +75,7 @@ export function HomeScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-6">
+      <div className="screen">
         <header className="flex shrink-0 items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="w-fit rounded-pill bg-paper-deep px-2.5 py-0.5 text-xs font-semibold text-ink-muted">
@@ -105,7 +105,7 @@ export function HomeScreen() {
           </div>
         </header>
 
-        <section className="shrink-0 rounded-card border-2 border-ink bg-ink p-5 text-paper shadow-press">
+        <section className="shrink-0 rounded-card border-2 border-ink bg-ink p-[clamp(0.875rem,2.6svh,1.25rem)] text-paper shadow-press">
           <div className="flex items-start gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-card border-2 border-ink bg-volt text-ink" aria-hidden>
               <Icon name="lock" size={22} weight="fill" />
@@ -143,7 +143,7 @@ export function HomeScreen() {
           ))}
         </div>
 
-        <div className="screen-scroll gap-3">
+        <div className="screen-scroll">
           {error && !quizzes ? (
             <ErrorState
               title="Can't reach the Qests"

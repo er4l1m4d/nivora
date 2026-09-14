@@ -69,7 +69,7 @@ export function WelcomeScreen() {
   return (
     <AppShell hideNav>
       <div className="screen">
-        <header className="relative flex items-center justify-center">
+        <header className="relative flex shrink-0 items-center justify-center">
           {step > 0 && (
             <button
               type="button"
@@ -83,7 +83,7 @@ export function WelcomeScreen() {
           <StepDots steps={STEPS} current={step} />
         </header>
 
-        <div key={step} className="flex flex-1 flex-col animate-screen-enter">
+        <div key={step} className="screen-scroll animate-screen-enter">
           {step === 0 && <StepIntro onNext={() => { setMode('demo'); setStep(1) }} />}
           {step === 1 && <StepLane mode={mode} onMode={setMode} onNext={() => setStep(2)} />}
           {step === 2 && (
@@ -110,7 +110,7 @@ export function WelcomeScreen() {
 function StepIntro({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-1 flex-col">
-      <div className="mt-8 flex items-center gap-2" aria-hidden>
+      <div className="mt-[clamp(1rem,3svh,2rem)] flex items-center gap-2" aria-hidden>
         <span className="flex h-9 w-9 items-center justify-center rounded-card border-2 border-ink bg-ink text-volt">
           <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
             <circle cx="11" cy="10.5" r="6" stroke="currentColor" strokeWidth="2.4" fill="none" />
@@ -121,17 +121,17 @@ function StepIntro({ onNext }: { onNext: () => void }) {
         <span className="font-display text-xl font-extrabold tracking-tight">Qestia</span>
       </div>
 
-      <h1 className="mt-10 font-display text-[2.75rem] font-extrabold leading-[1.04] tracking-tight text-ink">
+      <h1 className="mt-[clamp(1.25rem,4.5svh,2.5rem)] font-display text-[clamp(2rem,7.5svh,2.75rem)] font-extrabold leading-[1.04] tracking-tight text-ink">
         Know it.
         <br />
         <span className="highlight-swipe">Prove it.</span>
       </h1>
-      <p className="mt-4 max-w-[32ch] text-[15px] leading-relaxed text-ink-soft">
+      <p className="mt-[clamp(0.75rem,2svh,1rem)] max-w-[32ch] text-[15px] leading-relaxed text-ink-soft">
         Challenge what you've learned. Compete with your class. Earn your Standing.
       </p>
 
       {/* Mini quiz-card still life — the product in one glance */}
-      <div className="mt-8 rounded-card border-2 border-ink bg-ink p-4 shadow-press" aria-hidden>
+      <div className="mt-[clamp(1rem,3svh,2rem)] rounded-card border-2 border-ink bg-ink p-[clamp(0.75rem,2.2svh,1rem)] shadow-press" aria-hidden>
         <div className="rounded-card border-2 border-ink bg-surface p-4">
           <div className="flex items-center justify-between">
             <span className="rounded-pill bg-volt px-2.5 py-1 font-display text-[11px] font-extrabold text-ink">
@@ -162,7 +162,7 @@ function StepIntro({ onNext }: { onNext: () => void }) {
         </div>
       </div>
 
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-[clamp(1.25rem,3.5svh,2rem)]">
         <Button size="lg" block onClick={onNext}>
           Try a demo <Icon name="arrow-right" size={18} weight="bold" />
         </Button>
@@ -184,14 +184,14 @@ function StepLane({
 }) {
   return (
     <div className="flex flex-1 flex-col">
-      <h1 className="mt-8 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-ink">
+      <h1 className="mt-[clamp(1.25rem,4.5svh,2rem)] font-display text-[clamp(1.75rem,6.5svh,2.25rem)] font-extrabold leading-[1.05] tracking-tight text-ink">
         Pick your <span className="highlight">lane</span>
       </h1>
       <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">
         Three ways in. You can switch any time from your profile.
       </p>
 
-      <div className="mt-6 flex flex-col gap-3" role="radiogroup" aria-label="Mode">
+      <div className="mt-[clamp(1rem,3svh,1.5rem)] flex flex-col gap-[clamp(0.5rem,1.4svh,0.75rem)]" role="radiogroup" aria-label="Mode">
         {MODES.map((m) => {
           const active = mode === m.id
           return (
@@ -201,7 +201,7 @@ function StepLane({
               role="radio"
               aria-checked={active}
               onClick={() => onMode(m.id)}
-              className={`press flex min-h-20 items-center gap-3 rounded-card border-2 p-4 text-left transition-colors ${
+              className={`press flex min-h-[clamp(4rem,9svh,5rem)] items-center gap-3 rounded-card border-2 p-[clamp(0.625rem,1.8svh,1rem)] text-left transition-colors ${
                 active ? 'border-ink bg-volt shadow-press-sm' : 'border-line bg-surface hover:border-ink'
               }`}
             >
@@ -227,7 +227,7 @@ function StepLane({
         })}
       </div>
 
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-[clamp(1.25rem,3.5svh,2rem)]">
         <Button size="lg" block onClick={onNext}>
           Continue
         </Button>
@@ -257,7 +257,7 @@ function StepYou({
 }) {
   return (
     <div className="flex flex-1 flex-col">
-      <h1 className="mt-8 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-ink">
+      <h1 className="mt-[clamp(1.25rem,4.5svh,2rem)] font-display text-[clamp(1.75rem,6.5svh,2.25rem)] font-extrabold leading-[1.05] tracking-tight text-ink">
         What are you <span className="highlight">studying</span>?
       </h1>
       <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">
@@ -307,7 +307,7 @@ function StepYou({
         )}
       </div>
 
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-[clamp(1.25rem,3.5svh,2rem)]">
         <Button size="lg" block onClick={onEnter} disabled={busy}>
           {busy ? 'Locking in…' : 'Enter Qestia'}
           {!busy && <Icon name="lock" size={18} weight="fill" />}

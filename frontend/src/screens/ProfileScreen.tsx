@@ -76,8 +76,8 @@ export function ProfileScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
-        <div className="screen-scroll gap-4">
+      <div className="screen">
+        <div className="screen-scroll">
         <header className="flex shrink-0 items-center gap-4">
           <div
             className="flex h-16 w-16 shrink-0 items-center justify-center rounded-pill border-2 border-ink bg-volt font-display text-2xl font-extrabold text-ink shadow-press-sm"
@@ -275,6 +275,7 @@ export function ProfileScreen() {
             </>
           )}
         </section>
+        </div>
 
         <div className="screen-footer">
           <Button
@@ -287,10 +288,9 @@ export function ProfileScreen() {
             Sign out
           </Button>
 
-          <p className="text-center text-[11px] text-ink-muted">
+          <p className="mt-2 text-center text-[11px] text-ink-muted">
             Qestia · where knowing becomes proving · v0.1
           </p>
-        </div>
         </div>
       </div>
 

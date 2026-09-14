@@ -86,10 +86,10 @@ export function QuizDetailScreen() {
 
   return (
     <AppShell>
-      <div className="screen gap-4">
+      <div className="screen">
         {error && data && <StaleBanner />}
 
-        <div className="screen-scroll gap-4">
+        <div className="screen-scroll">
         <Link to="/home" className="inline-flex min-h-11 shrink-0 items-center gap-2 font-display text-sm font-bold text-ink-muted transition-colors hover:text-ink">
           <Icon name="arrow-left" size={17} weight="bold" /> All Qests
         </Link>

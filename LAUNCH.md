@@ -13,9 +13,9 @@ Launch night runbook: register on the competition dashboard, seed the first quiz
 
 ## 2. Pre-launch sanity (after the first deploy)
 
-- [ ] `GET [PROD_URL]/api/health` → 200 (cold start ~1-3 s on Vercel Hobby is expected — warm it with a ping 5 min before the demo)
-- [ ] `node scripts/e2e-smoke.mjs [PROD_URL]` — full 3-user loop against production
-- [ ] Seed the opening quiz: `node scripts/seed.mjs [PROD_URL] --min 3 --entry 25 --in-minutes 90`
+- [ ] `GET https://qestia.vercel.app/api/health` → 200 (cold start ~1-3 s on Vercel Hobby is expected — warm it with a ping 5 min before the demo)
+- [ ] `node scripts/e2e-smoke.mjs https://qestia.vercel.app` — full 3-user loop against production
+- [ ] Seed the opening quiz: `node scripts/seed.mjs https://qestia.vercel.app --min 3 --entry 25 --in-minutes 90`
 - [ ] Reload the Vercel homepage → seeded quiz visible as OPEN
 - [ ] Join the seeded quiz yourself from a phone (real "first user" pass through Welcome → Commit → Lobby)
 - [ ] `PAYMENTS_MODE=mock` for launch night unless the real-payments checklist in DEPLOY.md is fully done

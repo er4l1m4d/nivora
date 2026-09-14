@@ -423,3 +423,11 @@ OBS Studio (or Xbox Game Bar): 1080p, 60 fps, mic test pass. One beat per take �
 - **E.6** — `Participant.last_seen_at` added to `backend/app/models.py` + mirrored in `sql/001_initial_schema.sql`; dev `qestia.db` deleted so `init_db()` recreates with the frozen schema.
 - **Smoke-run gotcha (solution):** `e2e-smoke.mjs` cannot reach `SETTLED` within its 14 s poll window when `DISPUTE_WINDOW_SECONDS=300` (the VALIDATING→FINALIZED step waits the full window). Run locally with `DISPUTE_WINDOW_SECONDS=0` — matches the pytest harness (`conftest.py`) and the lifecycle completes in seconds. **Track C.4 note:** the prod smoke uses the default 300 s window, so `waitForStatus` (20 polls × 700 ms) will time out at SETTLED — either lower the deployed `DISPUTE_WINDOW_SECONDS` for the smoke or bump the poll cap before C.4.
 - **Gates:** `npm run lint` ✓, `npm run build` ✓, `npm run test` (18 ✓), `python -m pytest backend/tests -q` (14 ✓). CI green pending push.
+
+### C — Production deploy (Sun, done through C.6)
+- C.2: added `pypdf>=5.0` + `python-multipart>=0.0.9` to root + `backend/requirements.txt`.
+- C.4 blockers found & fixed:
+  1. **Root `/health` unreachable on Vercel** — only `/api/*` is routed to the Python function, so `/health` returned the SPA fallback. Added `/api/health` alias in `backend/app/main.py` and pointed `e2e-smoke.mjs` at it (matches plan C.4 + LAUNCH.md which already referenced `/api/health`).
+  2. **Schema drift → 500 on publish.** Prod Neon DB was first initialized by the *pre-E.6* deploy, so `participants.last_seen_at` (added in E.6) did not exist; `create_all` never alters existing tables. `e2e-smoke` surfaced `UndefinedColumnError: column participants.last_seen_at does not exist`. **Fix:** `ALTER TABLE participants ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMPTZ;` run directly against Neon (DB persists, so no code change needed). **Lesson (E.6 risk realized):** any future column must be added to the live DB manually — `init_db()` won't. Track F's `answeredQuestionIds` etc. will need the same treatment.
+- **C.4 verified:** `GET /api/health` → 200, `/api/config` → mock, deep link `/quiz/nonexistent` → 200 (SPA), and **full `e2e-smoke` PASSES against `https://qestia.vercel.app`** (lifecycle reaches SETTLED, payout conserved 150 NIM).
+- C.6: prod URL pinned in `LAUNCH.md`; tag `v0.9.0`.

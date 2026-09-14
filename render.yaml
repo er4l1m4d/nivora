@@ -1,0 +1,49 @@
+# Render Blueprint — Qestia backend (Track: beat Vercel Hobby 10s limit)
+#
+# Deploy: in Render dashboard -> "New" -> "Blueprint" -> connect the
+# er4l1m4d/qestia repo -> this file is detected automatically.
+# Env vars marked `sync: false` must be filled in once on first deploy
+# (secrets). Non-secret vars are applied as written.
+#
+# The Vite SPA stays on Vercel; set VITE_API_URL (Vercel project env) to
+# https://<this-service>.onrender.com and redeploy the frontend so it calls
+# this backend directly (CORS allows https://qestia.vercel.app).
+
+services:
+  - type: web
+    name: qestia-backend
+    runtime: python
+    pythonVersion: "3.12"
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      # --- database (same Neon pooled URL as Vercel prod) ---
+      - key: DATABASE_URL
+        sync: false
+      # --- payments: keep mock for the demo (no wallet prompts) ---
+      - key: PAYMENTS_MODE
+        value: mock
+      - key: DISPUTE_WINDOW_SECONDS
+        value: "300"
+      # --- CORS: allow the Vercel SPA + this service's own origin ---
+      - key: CORS_ORIGINS
+        value: https://qestia.vercel.app,https://qestia-backend.onrender.com
+      # --- LLM (the reason we moved off Vercel serverless) ---
+      # 60s client timeout so b.ai generation isn't cut at the 8s default.
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_API_BASE
+        value: https://api.b.ai/v1
+      - key: LLM_MODEL
+        value: qwen3.8-flash
+      - key: LLM_TIMEOUT_SECONDS
+        value: "60"
+      # --- only needed if you later flip PAYMENTS_MODE=real ---
+      - key: SETTLEMENT_TOKEN
+        sync: false
+      - key: ESCROW_ADDRESS
+        sync: false

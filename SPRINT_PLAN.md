@@ -459,3 +459,9 @@ OBS Studio (or Xbox Game Bar): 1080p, 60 fps, mic test pass. One beat per take �
 - **G.1** `DEMO_SCRIPT.md` refreshed: 8 beats with PDF→AI as the headline, prod URL `https://qestia.vercel.app` (no localhost), mock stakes, dispute window on staging/local.
 - **G.2** Agent-produced, screenshot-ready assets in `video/`: `title-card.html`, `captions.html` (Problem/Create/Commit/Compete/Settle), `economics.html` (80% back · 50/30/10 · full refund under quorum), `thumbnail.html` (1280×720 YouTube mock), `narration.md` (word-for-word, ~140 wpm, ~2:45), `youtube.md` (title/description/chapters/tags), `README.md` index. Brand palette matches the app (paper/ink/volt oklch).
 - **G.3 (yours):** record + edit per `DEMO_SCRIPT.md`; link final cut in `LAUNCH.md` §1. Acceptance: ≤3 min, PDF+AI scenes present, no localhost/`LK-`/jargon on any frame.
+
+### Render backend — beat the Vercel Hobby 10s cap (chosen over Fly.io)
+- **Why:** `POST /api/generate` → b.ai takes ~12s; Vercel Hobby serverless caps at 10s. Render free web service is long-running, no 10s limit. SPA stays free on Vercel.
+- **Repo changes:** `render.yaml` (Blueprint: `qestia-backend`, python 3.12, free, frankfurt, start `cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT`, health `/api/health`); `DEPLOY_RENDER.md` step-by-step. CORS already reads `CORS_ORIGINS`; client already honors `VITE_API_URL`; no app code change needed.
+- **Key fix:** `LLM_TIMEOUT_SECONDS` default is 8s (llm.py:20) — set to 60 on Render so generation isn't cut. `LLM_API_KEY` must be set or AI stays disabled (falls back to local).
+- **Remaining user steps:** Render dashboard New→Blueprint→repo; fill `DATABASE_URL` (Neon pooled) + `LLM_API_KEY`; set Vercel `VITE_API_URL=https://qestia-backend.onrender.com` + redeploy; verify health + PDF→AI on prod.

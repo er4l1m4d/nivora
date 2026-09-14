@@ -13,7 +13,6 @@ services:
   - type: web
     name: qestia-backend
     runtime: python
-    pythonVersion: "3.12"
     plan: free
     region: frankfurt
     branch: main

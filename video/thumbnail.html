@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1280, initial-scale=1" />
+<title>Qestia — YouTube Thumbnail</title>
+<style>
+  :root{
+    --paper:oklch(0.98 0.008 95); --paper-deep:oklch(0.945 0.014 95);
+    --ink:oklch(0.21 0.012 90); --ink-soft:oklch(0.4 0.018 90); --ink-muted:oklch(0.5 0.012 90);
+    --volt:oklch(0.92 0.2 105); --volt-deep:oklch(0.84 0.19 105);
+    --amber:oklch(0.62 0.13 70);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#222;font-family:"Inter",system-ui,sans-serif;display:flex;justify-content:center;padding:40px;}
+  .thumb{width:1280px;height:720px;background:var(--paper);border:5px solid var(--ink);
+    box-shadow:16px 16px 0 var(--ink);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;padding:80px;gap:28px;}
+  .podium{display:flex;align-items:flex-end;gap:18px;position:absolute;right:70px;bottom:60px;opacity:.95}
+  .pod{width:120px;border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:flex;align-items:center;justify-content:center;font-size:54px;font-weight:900;color:var(--ink)}
+  .p1{height:300px;background:var(--volt)}
+  .p2{height:220px;background:var(--volt-deep)}
+  .p3{height:160px;background:var(--amber)}
+  .kicker{font-size:30px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted)}
+  h1{font-size:118px;font-weight:900;letter-spacing:-0.03em;line-height:.95;max-width:860px}
+  h1 .hl{background:var(--volt);padding:0 .1em;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+  .tag{font-size:46px;font-weight:800;letter-spacing:.02em}
+  .badge{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);
+    padding:16px 30px;border-radius:999px;font-size:32px;font-weight:800;letter-spacing:.05em;align-self:flex-start}
+  .dot{width:18px;height:18px;border-radius:999px;background:var(--volt)}
+</style>
+</head>
+<body>
+  <div class="thumb">
+    <div class="kicker">Turn notes into a staked quiz</div>
+    <h1>Know it.<br><span class="hl">Prove it.</span></h1>
+    <div class="tag">Your lecture → tonight's Qest</div>
+    <div class="badge"><span class="dot"></span> Powered by NIM</div>
+    <div class="podium">
+      <div class="pod p2">2</div>
+      <div class="pod p1">1</div>
+      <div class="pod p3">3</div>
+    </div>
+  </div>
+</body>
+</html>

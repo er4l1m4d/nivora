@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1080, initial-scale=1" />
+<title>Qestia — Section Captions</title>
+<style>
+  :root{
+    --paper:oklch(0.98 0.008 95); --paper-deep:oklch(0.945 0.014 95);
+    --ink:oklch(0.21 0.012 90); --ink-soft:oklch(0.4 0.018 90); --ink-muted:oklch(0.5 0.012 90);
+    --volt:oklch(0.92 0.2 105); --volt-deep:oklch(0.84 0.19 105);
+    --amber:oklch(0.62 0.13 70);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#111;font-family:"Inter",system-ui,sans-serif;padding:40px;}
+  .card{
+    width:1080px;height:1920px;background:var(--paper);color:var(--ink);
+    display:flex;flex-direction:column;justify-content:center;padding:130px;gap:40px;margin-bottom:40px;
+    border:4px solid var(--ink);box-shadow:14px 14px 0 var(--ink);
+  }
+  .num{font-size:200px;font-weight:900;line-height:.8;color:var(--volt-deep);
+    -webkit-text-stroke:4px var(--ink);}
+  .title{font-size:96px;font-weight:900;letter-spacing:-0.03em;line-height:1.02}
+  .title .hl{background:var(--volt);padding:0 .12em;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+  .sub{font-size:40px;font-weight:600;color:var(--ink-soft);line-height:1.3;max-width:820px}
+  .tag{display:inline-block;align-self:flex-start;background:var(--ink);color:var(--paper);
+    padding:12px 24px;border-radius:999px;font-size:28px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="tag">The problem</div>
+    <div class="num">01</div>
+    <div class="title">Studying is <span class="hl">solo</span>.</div>
+    <p class="sub">You read, you hope it sticks, and nobody's accountable. Qestia puts skin in the game.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Create</div>
+    <div class="num">02</div>
+    <div class="title">Upload a PDF.<br><span class="hl">AI drafts</span> the Qest.</div>
+    <p class="sub">Cloze, multiple choice, true-or-false — reviewed and published in minutes. You play blind like everyone else.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Commit</div>
+    <div class="num">03</div>
+    <div class="title">Everyone <span class="hl">locks a stake</span>.</div>
+    <p class="sub">Verified on-chain with a personal memo code in real mode; instant in demo. The room fills, quorum ticks up.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Compete</div>
+    <div class="num">04</div>
+    <div class="title">One answer.<br><span class="hl">Locked</span> the moment you confirm.</div>
+    <p class="sub">The server owns the clock, so nobody games the timer. Pressure on, answers sealed.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Settle</div>
+    <div class="num">05</div>
+    <div class="title">Answers <span class="hl">unseal</span>.</div>
+    <p class="sub">Podium, payouts, and an explanation on every question — that's the actually-learning part.</p>
+  </div>
+
+</body>
+</html>

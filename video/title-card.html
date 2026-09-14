@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1080, initial-scale=1" />
+<title>Qestia — Title Card</title>
+<style>
+  :root{
+    --paper:oklch(0.98 0.008 95); --paper-deep:oklch(0.945 0.014 95);
+    --ink:oklch(0.21 0.012 90); --ink-soft:oklch(0.4 0.018 90); --ink-muted:oklch(0.5 0.012 90);
+    --volt:oklch(0.92 0.2 105); --volt-deep:oklch(0.84 0.19 105);
+    --amber:oklch(0.62 0.13 70);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .frame{width:1080px;height:1920px;background:var(--paper);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px;padding:120px;}
+  .kicker{font-size:34px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-muted)}
+  .hook{max-width:840px;text-align:center;font-size:78px;line-height:1.05;font-weight:900;letter-spacing:-0.02em}
+  .hook .hl{background:var(--volt);padding:0 .15em;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+  .brand{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:24px}
+  .logo{font-size:132px;font-weight:900;letter-spacing:-0.04em;line-height:1}
+  .tag{font-size:40px;font-weight:800;letter-spacing:.04em}
+  .badge{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);
+    padding:14px 26px;border-radius:999px;font-size:30px;font-weight:800;letter-spacing:.05em}
+  .dot{width:16px;height:16px;border-radius:999px;background:var(--volt)}
+  .rule{width:200px;height:6px;background:var(--ink);border-radius:999px}
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="kicker">Studying, but make it stake</div>
+    <h1 class="hook">What if your <span class="hl">notes</span> paid you for showing up?</h1>
+    <div class="rule"></div>
+    <div class="brand">
+      <div class="logo">Qestia</div>
+      <div class="tag">Know it. Prove it.</div>
+      <div class="badge"><span class="dot"></span> Powered by NIM</div>
+    </div>
+  </div>
+</body>
+</html>

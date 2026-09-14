@@ -454,3 +454,8 @@ OBS Studio (or Xbox Game Bar): 1080p, 60 fps, mic test pass. One beat per take �
 - **F.4** "Welcome back — we picked up where you left off." banner in `QuizPlayScreen` when a returning participant has prior answers (dismissible).
 - **F.5 tests:** `backend/tests/test_heartbeat.py` (heartbeat stamp + answeredQuestionIds tracking); `frontend/src/lib/resume.test.ts` (resume index). Full suite: backend **28 passed**, frontend **22 passed**, lint + build clean.
 - **F.6 cut line:** F.1 + F.2 shipped; the presence "away" dot (F.3) + welcome-back banner (F.4) included as polish.
+
+### G — Demo video (agent assets done; recording is yours)
+- **G.1** `DEMO_SCRIPT.md` refreshed: 8 beats with PDF→AI as the headline, prod URL `https://qestia.vercel.app` (no localhost), mock stakes, dispute window on staging/local.
+- **G.2** Agent-produced, screenshot-ready assets in `video/`: `title-card.html`, `captions.html` (Problem/Create/Commit/Compete/Settle), `economics.html` (80% back · 50/30/10 · full refund under quorum), `thumbnail.html` (1280×720 YouTube mock), `narration.md` (word-for-word, ~140 wpm, ~2:45), `youtube.md` (title/description/chapters/tags), `README.md` index. Brand palette matches the app (paper/ink/volt oklch).
+- **G.3 (yours):** record + edit per `DEMO_SCRIPT.md`; link final cut in `LAUNCH.md` §1. Acceptance: ≤3 min, PDF+AI scenes present, no localhost/`LK-`/jargon on any frame.
